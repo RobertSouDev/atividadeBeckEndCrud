@@ -6,60 +6,83 @@ const app = express()
 app.use(bodyParser.json())
 const PORT = 3000
 
-const estoque = [
-    { id: 1, nome: 'Notebook', preco: 1500 },
-    { id: 2, nome: 'Mouse', preco: 50 },
-    { id: 3, nome: 'Teclado', preco: 80 }
+const products = [
+    { 
+        id: 1,
+        nome: 'Notebook', 
+        preco: 1500
+     },
+    { 
+        id: 2, 
+        nome: 'Mouse', 
+        preco: 50
+     },
+    { 
+        id: 3,
+        nome: 'Teclado', 
+        preco: 80 
+    }
 ]
-app.get('/estoque', (req, res) => {
-    res.json(estoque)
+app.get('/api/products', (req, res) => {
+    res.json(products)
 })
 
-app.post('/estoque', (req, res) => {
+app.get('/api/products/:id', (req, res) => {
+    const productId = parseInt(req.params.id)
+    const product = products.find((product) => product.id === productId)
+
+    if (!product) {
+        return res.status(404).json({ error: 'Item não encontrado' })
+    }
+
+    res.json(product)
+})
+
+app.post('/api/products', (req, res) => {
     if (!req.body.nome ||!req.body.preco) {
         return res.status(400).json({ error: 'Nome e preço são obrigatórios' })
     }
-    const novoItem = req.body
-    novoItem.id = estoque.length + 1
-    estoque.push(novoItem)
-    res.status(201).json(novoItem)
+    const newProduct = req.body
+    newProduct.id = products.length + 1
+    products.push(newProduct)
+    res.status(201).json(newProduct)
     
 }
 )
 
-app.put('/estoque/:id', (req, res) => {
-    const id = req.params.id
-    const itemAtt = req.body
+app.put('/api/products/:id', (req, res) => {
+    const productId = req.params.id
+    const productAtt = req.body
 
 
-    const itemIndex = estoque.findIndex(item => item.id === parseInt(id))
-    if (itemIndex === -1) {
+    const productIndex = products.findIndex(product => product.id === parseInt(productId))
+    if (productIndex === -1) {
         console.error("Item not found");
         return res.status(404).json({ error: 'Item não encontrado' });
     }
 
-    if (!itemAtt || typeof itemAtt !==  "object") {
+    if (!productId || typeof productAtt !==  "object") {
         console.error("Invalid item");
         return res.status(400).json({ error: 'Item inválido' });
 
     }
 
-    estoque[itemIndex] = {...estoque[itemIndex],...itemAtt }
-    res.json(estoque[itemIndex])
+    products[productIndex] = {...products[productIndex],...productAtt }
+    res.json( products[productIndex] )
 })
 
-app.delete('/estoque/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    const itemIndex = estoque.findIndex(item => item.id === id);
+app.delete('/api/products/:id', (req, res) => {
+    const productId = parseInt(req.params.id);
+    const productIndex = products.findIndex(product => product.id === productId);
 
-    if (itemIndex === -1) {
+    if (productIndex === -1) {
         console.error("Item not found");
         return res.status(404).json({ error: 'Item não encontrado' });
     }
 
-    estoque.splice(itemIndex, 1);
+    products.splice(productIndex, 1);
     res.status(204).end();
 });
 app.listen(PORT, () => {
-    console.log(`Server is running on https://localhost:${PORT}`)
+    console.log(`Server is running on https://localhost:${PORT}/api/products`)
 })
