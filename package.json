@@ -1,0 +1,17 @@
+{
+  "name": "atividadebeckendcrud",
+  "version": "1.0.0",
+  "description": "## 1. Descrição do Projeto - **Nome do Projeto:** Sistema de Gerenciamento de Estoque - **Objetivo:** Desenvolver uma aplicação para gerenciar o estoque de produtos em uma loja, incluindo funcionalidades de CRUD (Create, Read, Update, Delete) para produtos.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2"
+  }
+}
